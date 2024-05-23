@@ -6,7 +6,7 @@ TARGET := code
 
 all: $(TARGET)
 
-$(TARGET): code.c instruction.c
+$(TARGET): code.c instruction.c code.h
 	@echo "##########################"
 	@echo "   Compiling $(TARGET)    "
 	@echo "##########################"

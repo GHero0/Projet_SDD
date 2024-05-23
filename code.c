@@ -9,6 +9,37 @@ void M_ARBRE_initialisation(M_ARBRE **a){
   *a = NULL;
 }
 
+void ecrire(M_ARBRE *pnoeud, unsigned char *tab)
+{
+    if ((*pnoeud).g != NULL)
+    {
+        ecrire((*pnoeud).g, tab);
+    }
+    char i;
+    for (i = (*pnoeud).deb; i < (*pnoeud).fin; i++)
+    {
+        *(tab + i) = 1;
+    }
+    if ((*pnoeud).d != NULL)
+    {
+        ecrire((*pnoeud).d, tab);
+    }
+}
+
+
+void affichage(M_ARBRE* pracine){
+  unsigned char lineaire[EL_MAX];
+  int i;
+  for(i = 0; i < EL_MAX; i++){
+    lineaire[i] = 0;
+  }
+  ecrire(pracine, lineaire);
+  for(i = 0; i < EL_MAX; i++){
+    if(lineaire[i] == 0){printf("#");}
+    else{printf(".");}
+  }
+  printf("\n");
+}
 
 void M_ARBRE_ajouter(M_ARBRE **a, int deb, int fin) {
     if (*a == NULL) { // Si l'arbre est vide
@@ -29,3 +60,4 @@ void M_ARBRE_ajouter(M_ARBRE **a, int deb, int fin) {
         }
     }
 }
+

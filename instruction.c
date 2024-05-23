@@ -2,7 +2,10 @@
 
 int main(){
   M_ARBRE* parbre;
-  parbre = initialisation();
-  printf("%d à %d\n",parbre->deb,(parbre->fin)-1);
+  M_ARBRE_initialisation(&parbre);
+  M_ARBRE_ajouter(&parbre, 2, 3);
+  M_ARBRE_ajouter(&parbre, 4, 8);
+  affichage(parbre); 
+
   return 0;
 }

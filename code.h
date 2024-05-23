@@ -17,11 +17,14 @@ typedef struct M_ARBRE {
     struct M_ARBRE* d;
 } M_ARBRE;
 
-#define TAILLE_ARBRE 31
+#define EL_MAX 41
 
 
 //Appel des fonctions
 
-M_ARBRE* initialisation();
+void M_ARBRE_initialisation(M_ARBRE**);
+void M_ARBRE_ajouter(M_ARBRE**, int, int);
+void affichage(M_ARBRE*);
+void ecrire(M_ARBRE*, unsigned char*);
 
 #endif
