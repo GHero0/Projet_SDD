@@ -17,9 +17,11 @@ typedef struct M_ARBRE {
     struct M_ARBRE* d;
 } M_ARBRE;
 
+#define TAILLE_ARBRE 31
+
 
 //Appel des fonctions
 
-
+M_ARBRE* initialisation();
 
 #endif
