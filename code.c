@@ -5,30 +5,27 @@
 
 //Creation des fonctions
 
-M_ARBRE* initialisation(){
-  M_ARBRE* t;
-  t = NULL;
-  t = realloc(t,sizeof(M_ARBRE));
-  (*t).g = NULL;
-  (*t).d = NULL;
-  (*t).deb = 0;
-  (*t).fin = TAILLE_ARBRE;
-  return t;
+void M_ARBRE_initialisation(M_ARBRE **a){
+  *a = NULL;
 }
 
-void M_ARBRE_afficher(M_ARBRE *a) {
-    if (a == NULL) {
-        printf("Arbre vide\n");
+
+void M_ARBRE_ajouter(M_ARBRE **a, int deb, int fin) {
+    if (*a == NULL) { // Si l'arbre est vide
+        *a = malloc(sizeof(M_ARBRE));
+        (*a)->deb = deb;
+        (*a)->fin = fin;
+        (*a)->g = NULL;
+        (*a)->d = NULL;
     } else {
-        printf("Debut : %d\n", a->deb);
-        printf("Fin : %d\n", a->fin);
-        M_ARBRE_afficher(a->g);
-        M_ARBRE_afficher(a->d);
+        if (deb == (*a)->fin){ // Correspond à une fusion
+            (*a)->fin = fin;
+        } else if (fin == (*a)->deb){ // Correspond à une fusion
+            (*a)->deb = deb;        
+        } else if (deb < (*a)->deb) {
+            M_ARBRE_ajouter(&((*a)->g), deb, fin); // On ajoute à gauche
+        } else {
+            M_ARBRE_ajouter(&((*a)->d), deb, fin); // On ajoute à droite
+        }
     }
-}
-
-int main(){
-    M_ARBRE *a = initialisation();
-    M_ARBRE_afficher(a);
-    return 0;
 }

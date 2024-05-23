@@ -6,11 +6,11 @@ TARGET := code
 
 all: $(TARGET)
 
-$(TARGET): code.c
+$(TARGET): code.c instruction.c
 	@echo "##########################"
 	@echo "   Compiling $(TARGET)    "
 	@echo "##########################"
-	$(CC) $(CFLAGS) -o code code.c -lm
+	$(CC) $(CFLAGS) -o code code.c instruction.c -lm
 	@echo
 
 dclean: 
