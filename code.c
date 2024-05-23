@@ -1,26 +1,19 @@
-#include <stdlib.h>
-#include <stdio.h>
-#include <stdbool.h>
+//Inclusion des libraires
+
+#include"code.h"
 
 
+//Creation des fonctions
 
-
-
-typedef struct M_ARBRE {
-    struct M_ARBRE *g;
-    int deb;
-    int fin;
-    struct M_ARBRE *d;
-} M_ARBRE;
-
-
-void M_arbre_creer(M_ARBRE **a) {
-    M_ARBRE *arbre = malloc(sizeof(M_ARBRE));
-    arbre->g = NULL;
-    arbre->d = NULL;
-    arbre->deb = 0;
-    arbre->fin = 30;
-    *a = arbre;
+M_ARBRE* initialisation(){
+  M_ARBRE* t;
+  t = NULL;
+  t = realloc(t,sizeof(M_ARBRE));
+  (*t).g = NULL;
+  (*t).d = NULL;
+  (*t).deb = 0;
+  (*t).fin = TAILLE_ARBRE;
+  return t;
 }
 
 void M_ARBRE_afficher(M_ARBRE *a) {
@@ -35,8 +28,7 @@ void M_ARBRE_afficher(M_ARBRE *a) {
 }
 
 int main(){
-    M_ARBRE *a;
-    M_arbre_creer(&a);
+    M_ARBRE *a = initialisation();
     M_ARBRE_afficher(a);
     return 0;
 }
