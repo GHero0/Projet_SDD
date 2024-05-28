@@ -26,6 +26,9 @@ void ecrire(M_ARBRE *pnoeud, unsigned char *tab)
     }
 }
 
+bool est_vide(M_ARBRE* a){
+    return a == NULL;
+}
 
 void affichage(M_ARBRE* pracine){
   unsigned char lineaire[EL_MAX];
@@ -61,3 +64,23 @@ void M_ARBRE_ajouter(M_ARBRE **a, int deb, int fin) {
     }
 }
 
+bool est_maximier(M_ARBRE *a){
+    M_ARBRE *temp = a;
+    bool result = true;
+    if (temp->g != NULL){
+        if ((temp->fin - temp->deb) < (temp->g->fin - temp->g->deb)){
+            result = false;
+        } else {
+            est_maximier(temp->g);
+        
+        }
+    }
+    if (temp->d != NULL){
+        if ((temp->fin - temp->deb) < (temp->d->fin - temp->d->deb)){
+            result = false;
+        } else {
+            est_maximier(temp->d);
+        }
+    }
+    return result;
+}
