@@ -37,7 +37,7 @@
  * @param a Un pointeur vers l'arbre à vérifier
  * @return bool Retourne vrai si l'arbre est vide, faux sinon
  */
-bool est_vide(M_ARBRE* a){
+bool M_ARBRE_est_vide(M_ARBRE* a){
     return a == NULL;
 }
 
@@ -70,8 +70,8 @@ void affichage(M_ARBRE* pracine){
   }
   ecrire(pracine, lineaire);
   for(i = 0; i < EL_MAX; i++){
-    if(lineaire[i] == 0){printf("◼️");}
-    else{printf("◻️");}
+    if(lineaire[i] == 0){printf("⬛");}
+    else{printf("🔲");}
   }
   printf("\n");
 }
@@ -107,7 +107,7 @@ void M_ARBRE_ajouter(M_ARBRE** a, int deb, int fin) {
  * @param arbre Un pointeur vers l'arbre à vérifier
  * @return bool Retourne vrai si l'arbre est maximier, faux sinon
  */
-bool est_maximier(M_ARBRE *arbre)
+bool M_ARBRE_est_maximier(M_ARBRE *arbre)
 {
     if (arbre == NULL)
     {
@@ -115,16 +115,35 @@ bool est_maximier(M_ARBRE *arbre)
     }
 
     // Vérifier l'enfant gauche
-    if (arbre->g != NULL && (arbre->deb < arbre->g->deb || !est_maximier(arbre->g)))
+    if (arbre->g != NULL && (arbre->deb < arbre->g->deb || !M_ARBRE_est_maximier(arbre->g)))
     {
         return false;
     }
 
     // Vérifier l'enfant droit
-    if (arbre->d != NULL && (arbre->deb < arbre->d->deb || !est_maximier(arbre->d)))
+    if (arbre->d != NULL && (arbre->deb < arbre->d->deb || !M_ARBRE_est_maximier(arbre->d)))
     {
         return false;
     }
 
     return true;
+}
+
+int M_ARBRE_LGMAX(M_ARBRE *a){
+    if (M_ARBRE_est_vide(a)){
+        return 0;
+    }
+    else 
+    {
+        return a->fin - a->deb;
+    }
+}
+
+
+
+void M_ARBRE_rotation_g(M_ARBRE **a){
+    M_ARBRE *tmp = (*a)->d;
+    (*a)->d = tmp->g;
+    tmp->g = *a;
+    *a = tmp;
 }
