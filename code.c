@@ -8,25 +8,22 @@
  * @date 2024
  */
 
-//Inclusion des libraires
+// Inclusion des libraires
 
-#include"code.h"
+#include "code.h"
 
-
-    /**
-     * @brief Initialise un arbre
-     *
-     * Cette fonction prend en paramètre un pointeur vers un pointeur d'arbre (M_ARBRE) et initialise l'arbre à NULL.
-     * Après l'appel de cette fonction, l'arbre pointé par le paramètre sera vide.
-     *
-     * @param a Un pointeur vers le pointeur de l'arbre à initialiser
-     */
-    void
-    M_ARBRE_initialisation(M_ARBRE **a)
+/**
+ * @brief Initialise un arbre
+ *
+ * Cette fonction prend en paramètre un pointeur vers un pointeur d'arbre (M_ARBRE) et initialise l'arbre à NULL.
+ * Après l'appel de cette fonction, l'arbre pointé par le paramètre sera vide.
+ *
+ * @param a Un pointeur vers le pointeur de l'arbre à initialiser
+ */
+void M_ARBRE_initialisation(M_ARBRE **a)
 {
     *a = NULL;
 }
-
 
 /**
  * @brief Vérifie si un arbre est vide
@@ -37,7 +34,8 @@
  * @param a Un pointeur vers l'arbre à vérifier
  * @return bool Retourne vrai si l'arbre est vide, faux sinon
  */
-bool M_ARBRE_est_vide(M_ARBRE* a){
+bool M_ARBRE_est_vide(M_ARBRE *a)
+{
     return a == NULL;
 }
 
@@ -47,13 +45,21 @@ Cette procédure va, pour toutes les valeurs comprises entre le début el la fin
 Cela permet de garder trace des endroits où on à ecrit, i.e. des élémnts de l'arbre.
 Puis on applique ce traitement aux ss_arbres gauche et droit afin de traiter tout l'arbre.
  */
-void ecrire(M_ARBRE* pnoeud, unsigned char* tab){
-    if ((*pnoeud).g != NULL){ecrire((*pnoeud).g, tab);}
+void ecrire(M_ARBRE *pnoeud, unsigned char *tab)
+{
+    if ((*pnoeud).g != NULL)
+    {
+        ecrire((*pnoeud).g, tab);
+    }
     char i;
-    for (i = (*pnoeud).deb; i < (*pnoeud).fin; i++){
+    for (i = (*pnoeud).deb; i < (*pnoeud).fin; i++)
+    {
         *(tab + i) = 1;
     }
-    if ((*pnoeud).d != NULL){ecrire((*pnoeud).d, tab);}
+    if ((*pnoeud).d != NULL)
+    {
+        ecrire((*pnoeud).d, tab);
+    }
 }
 
 /*
@@ -62,39 +68,73 @@ Pour cela on crée un tableau avec autant de cases que de 'cases mémoires' de l
 Ensuite on lance ecrire qui va modifier le tableau avec des 1 dans les cases présentes dans l'arbre.
 Finalement on parcourt ce tableau et pour chaque on représente un trou (1 dans le tableau) avec . et un plein avec #.
  */
-void affichage(M_ARBRE* pracine){
-  unsigned char lineaire[EL_MAX];
-  int i;
-  for(i = 0; i < EL_MAX; i++){
-    lineaire[i] = 0;
-  }
-  ecrire(pracine, lineaire);
-  for(i = 0; i < EL_MAX; i++){
-    if(lineaire[i] == 0){printf("⬛");}
-    else{printf("🔲");}
-  }
-  printf("\n");
+void affichage(M_ARBRE *pracine)
+{
+    unsigned char lineaire[EL_MAX];
+    int i;
+    for (i = 0; i < EL_MAX; i++)
+    {
+        lineaire[i] = 0;
+    }
+    ecrire(pracine, lineaire);
+    for (i = 0; i < EL_MAX; i++)
+    {
+        if (lineaire[i] == 0)
+        {
+            printf("⬛");
+        }
+        else
+        {
+            printf("🔲");
+        }
+    }
+    printf("\n");
 }
 
-void M_ARBRE_ajouter(M_ARBRE** a, int deb, int fin) {
-  if (*a == NULL) { // Si l'arbre est vide
-    *a = malloc(sizeof(M_ARBRE));
-    (*a)->deb = deb;
-    (*a)->fin = fin;
-    (*a)->g = NULL;
-    (*a)->d = NULL;
-  }
-  else {
-    if (deb == (*a)->fin){ // Correspond à une fusion
-      (*a)->fin = fin;
-    } else if (fin == (*a)->deb){ // Correspond à une fusion
-      (*a)->deb = deb;        
-    } else if (deb < (*a)->deb) {
-      M_ARBRE_ajouter(&((*a)->g), deb, fin); // On ajoute à gauche
-    } else {
-      M_ARBRE_ajouter(&((*a)->d), deb, fin); // On ajoute à droite
+
+
+
+void M_ARBRE_ajouter(M_ARBRE **a, int deb, int fin)
+{
+    if (*a == NULL)
+    { // Si l'arbre est vide
+        *a = malloc(sizeof(M_ARBRE));
+        (*a)->deb = deb;
+        (*a)->fin = fin;
+        (*a)->g = NULL;
+        (*a)->d = NULL;
     }
-  }
+    else
+    {
+        if (deb == (*a)->fin)
+        { // Correspond à une fusion "à droite"
+            (*a)->fin = fin;
+            // Double fusion lorsqu'on complete le trou
+            if ((*a)->fin == ((*a)->d)->deb)
+            {
+                (*a)->fin = ((*a)->d)->fin;
+                (*a)->d = ((*a)->d)->d;
+            }
+        }
+        else if (fin == (*a)->deb)
+        { // Correspond à une fusion "à gauche"
+            (*a)->deb = deb;
+            // Double fusion lorsqu'on complete le trou
+            if ((*a)->deb == ((*a)->g)->fin)
+            {
+                (*a)->deb = ((*a)->g)->deb;
+                (*a)->g = ((*a)->g)->g;
+            }
+        }
+        else if (deb < (*a)->deb)
+        {
+            M_ARBRE_ajouter(&((*a)->g), deb, fin); // On ajoute à gauche
+        }
+        else
+        {
+            M_ARBRE_ajouter(&((*a)->d), deb, fin); // On ajoute à droite
+        }
+    }
 }
 
 /**
@@ -129,11 +169,13 @@ bool M_ARBRE_est_maximier(M_ARBRE *arbre)
     return true;
 }
 
-int M_ARBRE_LGMAX(M_ARBRE *a){
-    if (M_ARBRE_est_vide(a)){
+int M_ARBRE_LGMAX(M_ARBRE *a)
+{
+    if (M_ARBRE_est_vide(a))
+    {
         return 0;
     }
-    else 
+    else
     {
         return a->fin - a->deb;
     }
@@ -141,33 +183,46 @@ int M_ARBRE_LGMAX(M_ARBRE *a){
 /*
 
  */
-void affichage_arbre(M_ARBRE* pracine, int espacement){
-  if(M_ARBRE_est_vide(pracine)){printf("L'arbre est vide\n");}
-  else{
-    bool plus = false;
-    if(pracine->g != NULL || pracine->d != NULL){
-      espacement += 8;
-      plus = true;
+void affichage_arbre(M_ARBRE *pracine, int espacement)
+{
+    if (M_ARBRE_est_vide(pracine))
+    {
+        printf("L'arbre est vide\n");
     }
-    
-    // bloc de droite (au-dessus)
-    if(pracine->d != NULL){affichage_arbre(pracine->d, espacement);}
-    
-    // bloc central
-    for(int i = 0; i < espacement-plus*8; i++){
-      printf(" ");
+    else
+    {
+        bool plus = false;
+        if (pracine->g != NULL || pracine->d != NULL)
+        {
+            espacement += 8;
+            plus = true;
+        }
+
+        // bloc de droite (au-dessus)
+        if (pracine->d != NULL)
+        {
+            affichage_arbre(pracine->d, espacement);
+        }
+
+        // bloc central
+        for (int i = 0; i < espacement - plus * 8; i++)
+        {
+            printf(" ");
+        }
+        printf("(%d,%d)\n", pracine->deb, pracine->fin);
+
+        // bloc de gauche (en-dessous)
+        if (pracine->g != NULL)
+        {
+            affichage_arbre(pracine->g, espacement);
+        }
     }
-    printf("(%d,%d)\n",pracine->deb,pracine->fin);
-    
-    // bloc de gauche (en-dessous)
-    if(pracine->g != NULL){affichage_arbre(pracine->g, espacement);}
-  }
 }
 
-
-
-void M_ARBRE_rotation_g(M_ARBRE **a){
-    if ((*a)->d != NULL){
+void M_ARBRE_rotation_g(M_ARBRE **a)
+{
+    if ((*a)->d != NULL)
+    {
         M_ARBRE *tmp = (*a)->d;
         (*a)->d = tmp->g;
         tmp->g = *a;
@@ -175,8 +230,10 @@ void M_ARBRE_rotation_g(M_ARBRE **a){
     }
 }
 
-void M_ARBRE_rotation_d(M_ARBRE **a){
-    if ((*a)->g != NULL) { 
+void M_ARBRE_rotation_d(M_ARBRE **a)
+{
+    if ((*a)->g != NULL)
+    {
         M_ARBRE *tmp = (*a)->g;
         (*a)->g = tmp->d;
         tmp->d = *a;
