@@ -5,31 +5,35 @@
 
 //Creation des fonctions
 
-void M_ARBRE_initialisation(M_ARBRE **a){
+void M_ARBRE_initialisation(M_ARBRE** a){
   *a = NULL;
-}
-
-void ecrire(M_ARBRE *pnoeud, unsigned char *tab)
-{
-    if ((*pnoeud).g != NULL)
-    {
-        ecrire((*pnoeud).g, tab);
-    }
-    char i;
-    for (i = (*pnoeud).deb; i < (*pnoeud).fin; i++)
-    {
-        *(tab + i) = 1;
-    }
-    if ((*pnoeud).d != NULL)
-    {
-        ecrire((*pnoeud).d, tab);
-    }
 }
 
 bool est_vide(M_ARBRE* a){
     return a == NULL;
 }
 
+/*
+ecrire prend un noeud d'un arbre et un tableau.
+Cette procédure va, pour toutes les valeurs comprises entre le début el la fin du noeud, aller écrire dans le tableau un 1.
+Cela permet de garder trace des endroits où on à ecrit, i.e. des élémnts de l'arbre.
+Puis on applique ce traitement aux ss_arbres gauche et droit afin de traiter tout l'arbre.
+ */
+void ecrire(M_ARBRE* pnoeud, unsigned char* tab){
+    if ((*pnoeud).g != NULL){ecrire((*pnoeud).g, tab);}
+    char i;
+    for (i = (*pnoeud).deb; i < (*pnoeud).fin; i++){
+        *(tab + i) = 1;
+    }
+    if ((*pnoeud).d != NULL){ecrire((*pnoeud).d, tab);}
+}
+
+/*
+affichage prend la racine d'un arbre et print un affichage style file de priorité.
+Pour cela on crée un tableau avec autant de cases que de 'cases mémoires' de la file de priorité.
+Ensuite on lance ecrire qui va modifier le tableau avec des 1 dans les cases présentes dans l'arbre.
+Finalement on parcourt ce tableau et pour chaque on représente un trou (1 dans le tableau) avec . et un plein avec #.
+ */
 void affichage(M_ARBRE* pracine){
   unsigned char lineaire[EL_MAX];
   int i;
@@ -44,14 +48,15 @@ void affichage(M_ARBRE* pracine){
   printf("\n");
 }
 
-void M_ARBRE_ajouter(M_ARBRE **a, int deb, int fin) {
+void M_ARBRE_ajouter(M_ARBRE** a, int deb, int fin) {
     if (*a == NULL) { // Si l'arbre est vide
         *a = malloc(sizeof(M_ARBRE));
         (*a)->deb = deb;
         (*a)->fin = fin;
         (*a)->g = NULL;
         (*a)->d = NULL;
-    } else {
+    }
+    else {
         if (deb == (*a)->fin){ // Correspond à une fusion
             (*a)->fin = fin;
         } else if (fin == (*a)->deb){ // Correspond à une fusion
@@ -64,23 +69,3 @@ void M_ARBRE_ajouter(M_ARBRE **a, int deb, int fin) {
     }
 }
 
-bool est_maximier(M_ARBRE *a){
-    M_ARBRE *temp = a;
-    bool result = true;
-    if (temp->g != NULL){
-        if ((temp->fin - temp->deb) < (temp->g->fin - temp->g->deb)){
-            result = false;
-        } else {
-            est_maximier(temp->g);
-        
-        }
-    }
-    if (temp->d != NULL){
-        if ((temp->fin - temp->deb) < (temp->d->fin - temp->d->deb)){
-            result = false;
-        } else {
-            est_maximier(temp->d);
-        }
-    }
-    return result;
-}

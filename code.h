@@ -23,9 +23,9 @@ typedef struct M_ARBRE {
 //Appel des fonctions
 
 void M_ARBRE_initialisation(M_ARBRE**);
-void M_ARBRE_ajouter(M_ARBRE**, int, int);
-void affichage(M_ARBRE*);
+bool est_vide(M_ARBRE*);
 void ecrire(M_ARBRE*, unsigned char*);
-bool est_maximier(M_ARBRE *a);
+void affichage(M_ARBRE*);
+void M_ARBRE_ajouter(M_ARBRE**, int, int);
 
 #endif
