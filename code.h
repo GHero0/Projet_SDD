@@ -27,5 +27,6 @@ bool est_vide(M_ARBRE*);
 void ecrire(M_ARBRE*, unsigned char*);
 void affichage(M_ARBRE*);
 void M_ARBRE_ajouter(M_ARBRE**, int, int);
+void affichage_arbre(M_ARBRE*, int);
 
 #endif
