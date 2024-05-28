@@ -77,24 +77,24 @@ void affichage(M_ARBRE* pracine){
 }
 
 void M_ARBRE_ajouter(M_ARBRE** a, int deb, int fin) {
-    if (*a == NULL) { // Si l'arbre est vide
-        *a = malloc(sizeof(M_ARBRE));
-        (*a)->deb = deb;
-        (*a)->fin = fin;
-        (*a)->g = NULL;
-        (*a)->d = NULL;
+  if (*a == NULL) { // Si l'arbre est vide
+    *a = malloc(sizeof(M_ARBRE));
+    (*a)->deb = deb;
+    (*a)->fin = fin;
+    (*a)->g = NULL;
+    (*a)->d = NULL;
+  }
+  else {
+    if (deb == (*a)->fin){ // Correspond à une fusion
+      (*a)->fin = fin;
+    } else if (fin == (*a)->deb){ // Correspond à une fusion
+      (*a)->deb = deb;        
+    } else if (deb < (*a)->deb) {
+      M_ARBRE_ajouter(&((*a)->g), deb, fin); // On ajoute à gauche
+    } else {
+      M_ARBRE_ajouter(&((*a)->d), deb, fin); // On ajoute à droite
     }
-    else {
-        if (deb == (*a)->fin){ // Correspond à une fusion
-            (*a)->fin = fin;
-        } else if (fin == (*a)->deb){ // Correspond à une fusion
-            (*a)->deb = deb;        
-        } else if (deb < (*a)->deb) {
-            M_ARBRE_ajouter(&((*a)->g), deb, fin); // On ajoute à gauche
-        } else {
-            M_ARBRE_ajouter(&((*a)->d), deb, fin); // On ajoute à droite
-        }
-    }
+  }
 }
 
 /**
@@ -138,12 +138,48 @@ int M_ARBRE_LGMAX(M_ARBRE *a){
         return a->fin - a->deb;
     }
 }
+/*
+
+ */
+void affichage_arbre(M_ARBRE* pracine, int espacement){
+  if(M_ARBRE_est_vide(pracine)){printf("L'arbre est vide\n");}
+  else{
+    bool plus = false;
+    if(pracine->g != NULL || pracine->d != NULL){
+      espacement += 8;
+      plus = true;
+    }
+    
+    // bloc de droite (au-dessus)
+    if(pracine->d != NULL){affichage_arbre(pracine->d, espacement);}
+    
+    // bloc central
+    for(int i = 0; i < espacement-plus*8; i++){
+      printf(" ");
+    }
+    printf("(%d,%d)\n",pracine->deb,pracine->fin);
+    
+    // bloc de gauche (en-dessous)
+    if(pracine->g != NULL){affichage_arbre(pracine->g, espacement);}
+  }
+}
 
 
 
 void M_ARBRE_rotation_g(M_ARBRE **a){
-    M_ARBRE *tmp = (*a)->d;
-    (*a)->d = tmp->g;
-    tmp->g = *a;
-    *a = tmp;
+    if ((*a)->d != NULL){
+        M_ARBRE *tmp = (*a)->d;
+        (*a)->d = tmp->g;
+        tmp->g = *a;
+        *a = tmp;
+    }
+}
+
+void M_ARBRE_rotation_d(M_ARBRE **a){
+    if ((*a)->g != NULL) { 
+        M_ARBRE *tmp = (*a)->g;
+        (*a)->g = tmp->d;
+        tmp->d = *a;
+        *a = tmp;
+    }
 }
