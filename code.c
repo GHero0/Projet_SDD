@@ -1,12 +1,28 @@
+
+/**
+ * @file code.c
+ * @brief this c file describes all the functions for the SDD Project
+ *
+ * @author PIRCA George
+ * @author GUERITAULT Roamin
+ *
+ * @date 2024
+ */
+
 //Inclusion des libraires
 
 #include"code.h"
 
-
-//Creation des fonctions
-
+/**
+ * @brief Initialise un arbre
+ *
+ * Cette fonction prend en paramètre un pointeur vers un pointeur d'arbre (M_ARBRE) et initialise l'arbre à NULL.
+ * Après l'appel de cette fonction, l'arbre pointé par le paramètre sera vide.
+ *
+ * @param a Un pointeur vers le pointeur de l'arbre à initialiser
+ */
 void M_ARBRE_initialisation(M_ARBRE **a){
-  *a = NULL;
+    *a = NULL;
 }
 
 void ecrire(M_ARBRE *pnoeud, unsigned char *tab)
@@ -26,6 +42,15 @@ void ecrire(M_ARBRE *pnoeud, unsigned char *tab)
     }
 }
 
+/**
+ * @brief Vérifie si un arbre est vide
+ *
+ * Cette fonction prend en paramètre un pointeur vers un arbre (M_ARBRE) et vérifie si cet arbre est vide.
+ * Elle retourne vrai (true) si l'arbre est vide, et faux (false) sinon.
+ *
+ * @param a Un pointeur vers l'arbre à vérifier
+ * @return bool Retourne vrai si l'arbre est vide, faux sinon
+ */
 bool est_vide(M_ARBRE* a){
     return a == NULL;
 }
@@ -38,8 +63,8 @@ void affichage(M_ARBRE* pracine){
   }
   ecrire(pracine, lineaire);
   for(i = 0; i < EL_MAX; i++){
-    if(lineaire[i] == 0){printf("#");}
-    else{printf(".");}
+    if(lineaire[i] == 0){printf("◼️");}
+    else{printf("◻️");}
   }
   printf("\n");
 }
@@ -64,23 +89,34 @@ void M_ARBRE_ajouter(M_ARBRE **a, int deb, int fin) {
     }
 }
 
-bool est_maximier(M_ARBRE *a){
-    M_ARBRE *temp = a;
-    bool result = true;
-    if (temp->g != NULL){
-        if ((temp->fin - temp->deb) < (temp->g->fin - temp->g->deb)){
-            result = false;
-        } else {
-            est_maximier(temp->g);
-        
-        }
+/**
+ * @brief Vérifie si un arbre est un arbre maximier
+ *
+ * Cette fonction prend en paramètre un pointeur vers un arbre (M_ARBRE) et vérifie si cet arbre est un arbre maximier.
+ * Un arbre est considéré comme maximier si chaque nœud est supérieur ou égal à ses enfants.
+ * Elle retourne vrai (true) si l'arbre est maximier, et faux (false) sinon.
+ *
+ * @param arbre Un pointeur vers l'arbre à vérifier
+ * @return bool Retourne vrai si l'arbre est maximier, faux sinon
+ */
+bool est_maximier(M_ARBRE *arbre)
+{
+    if (arbre == NULL)
+    {
+        return true; // Un arbre vide est considéré comme maximier
     }
-    if (temp->d != NULL){
-        if ((temp->fin - temp->deb) < (temp->d->fin - temp->d->deb)){
-            result = false;
-        } else {
-            est_maximier(temp->d);
-        }
+
+    // Vérifier l'enfant gauche
+    if (arbre->g != NULL && (arbre->deb < arbre->g->deb || !est_maximier(arbre->g)))
+    {
+        return false;
     }
-    return result;
+
+    // Vérifier l'enfant droit
+    if (arbre->d != NULL && (arbre->deb < arbre->d->deb || !est_maximier(arbre->d)))
+    {
+        return false;
+    }
+
+    return true;
 }
