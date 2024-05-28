@@ -129,8 +129,6 @@ bool est_maximier(M_ARBRE *arbre)
     return true;
 }
 /*
-
- */
 void affichage_arbre(M_ARBRE* pracine, int espacement){
   if(est_vide(pracine)){printf("L'arbre est vide\n");}
   else{
@@ -153,7 +151,40 @@ void affichage_arbre(M_ARBRE* pracine, int espacement){
     if(pracine->g != NULL){affichage_arbre(pracine->g, espacement);}
   }
 }
+ */
 
+void affichage_arbre_inter(M_ARBRE* pnoeud, int espacement){
+  bool yag = false;
+  bool yad = false;
+  
+  // bloc de droite (au-dessus)
+  if(pnoeud != NULL){
+    if(pnoeud->d != NULL){
+      yad = true;
+      espacement += 8;
+    }
+    affichage_arbre_inter(pnoeud->d, espacement);
+  }
+  
+  // bloc central
+  for(int i = 0; i < espacement-(yag || yad)*8; i++){
+    printf(" ");
+  }
+  if(pnoeud == NULL){printf("        NULL\n");}
+  else{printf("(%d,%d)\n",pnoeud->deb,pnoeud->fin);}
+    
+  // bloc de gauche (en-dessous)
+  if(pnoeud != NULL){
+    if(pnoeud->g != NULL){
+      yag = true;
+      if(!yad){espacement += 8;}
+    }
+    affichage_arbre_inter(pnoeud->g, espacement);
+  }
+}
 
-
-
+void affichage_arbre(M_ARBRE* pracine){
+  printf("------------------------------------------\n");
+  affichage_arbre_inter(pracine,0);
+  printf("------------------------------------------\n");
+}
