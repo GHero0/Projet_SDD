@@ -91,7 +91,17 @@ void affichage(M_ARBRE *pracine)
     printf("\n");
 }
 
-
+int M_ARBRE_LGMAX(M_ARBRE *a)
+{
+    if (M_ARBRE_est_vide(a))
+    {
+        return 0;
+    }
+    else
+    {
+        return a->fin - a->deb;
+    }
+}
 
 
 void M_ARBRE_ajouter(M_ARBRE **a, int deb, int fin)
@@ -169,55 +179,7 @@ bool M_ARBRE_est_maximier(M_ARBRE *arbre)
     return true;
 }
 
-int M_ARBRE_LGMAX(M_ARBRE *a)
-{
-    if (M_ARBRE_est_vide(a))
-    {
-        return 0;
-    }
-    else
-    {
-        return a->fin - a->deb;
-    }
-}
-/*
 
- */
-void affichage_arbre(M_ARBRE *pracine, int espacement)
-{
-    if (M_ARBRE_est_vide(pracine))
-    {
-        printf("L'arbre est vide\n");
-    }
-    else
-    {
-        bool plus = false;
-        if (pracine->g != NULL || pracine->d != NULL)
-        {
-            espacement += 8;
-            plus = true;
-        }
-
-        // bloc de droite (au-dessus)
-        if (pracine->d != NULL)
-        {
-            affichage_arbre(pracine->d, espacement);
-        }
-
-        // bloc central
-        for (int i = 0; i < espacement - plus * 8; i++)
-        {
-            printf(" ");
-        }
-        printf("(%d,%d)\n", pracine->deb, pracine->fin);
-
-        // bloc de gauche (en-dessous)
-        if (pracine->g != NULL)
-        {
-            affichage_arbre(pracine->g, espacement);
-        }
-    }
-}
 
 void M_ARBRE_rotation_g(M_ARBRE **a)
 {
@@ -239,4 +201,39 @@ void M_ARBRE_rotation_d(M_ARBRE **a)
         tmp->d = *a;
         *a = tmp;
     }
+}
+void affichage_arbre_inter(M_ARBRE* pnoeud, int espacement){
+  bool yag = false;
+  bool yad = false;
+  
+  // bloc de droite (au-dessus)
+  if(pnoeud != NULL){
+    if(pnoeud->d != NULL){
+      yad = true;
+      espacement += 8;
+    }
+    affichage_arbre_inter(pnoeud->d, espacement);
+  }
+  
+  // bloc central
+  for(int i = 0; i < espacement-(yag || yad)*8; i++){
+    printf(" ");
+  }
+  if(pnoeud == NULL){printf("        NULL\n");}
+  else{printf("(%d,%d)\n",pnoeud->deb,pnoeud->fin);}
+    
+  // bloc de gauche (en-dessous)
+  if(pnoeud != NULL){
+    if(pnoeud->g != NULL){
+      yag = true;
+      if(!yad){espacement += 8;}
+    }
+    affichage_arbre_inter(pnoeud->g, espacement);
+  }
+}
+
+void affichage_arbre(M_ARBRE* pracine){
+  printf("------------------------------------------\n");
+  affichage_arbre_inter(pracine,0);
+  printf("------------------------------------------\n");
 }
