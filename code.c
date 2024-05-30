@@ -81,11 +81,11 @@ void affichage(M_ARBRE *pracine)
     {
         if (lineaire[i] == 0)
         {
-            printf("⬛");
+            printf("#");
         }
         else
         {
-            printf("🔲");
+            printf(".");
         }
     }
     printf("\n");
