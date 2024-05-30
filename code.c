@@ -203,20 +203,19 @@ void M_ARBRE_rotation_d(M_ARBRE **a)
     }
 }
 void affichage_arbre_inter(M_ARBRE* pnoeud, int espacement){
-  bool yag = false;
-  bool yad = false;
+  bool fiston = false;
   
   // bloc de droite (au-dessus)
   if(pnoeud != NULL){
     if(pnoeud->d != NULL){
-      yad = true;
+      fiston = true;
       espacement += 8;
     }
     affichage_arbre_inter(pnoeud->d, espacement);
   }
   
   // bloc central
-  for(int i = 0; i < espacement-(yag || yad)*8; i++){
+  for(int i = 0; i < espacement-(fiston*8); i++){
     printf(" ");
   }
   if(pnoeud == NULL){printf("        NULL\n");}
@@ -225,8 +224,10 @@ void affichage_arbre_inter(M_ARBRE* pnoeud, int espacement){
   // bloc de gauche (en-dessous)
   if(pnoeud != NULL){
     if(pnoeud->g != NULL){
-      yag = true;
-      if(!yad){espacement += 8;}
+      if(!fiston){espacement += 8;}
+    }
+    else{
+      if(fiston){espacement = espacement - 8;}
     }
     affichage_arbre_inter(pnoeud->g, espacement);
   }
