@@ -3,7 +3,7 @@
  * @brief this c file describes all the functions for the SDD Project
  *
  * @author PIRCA George
- * @author GUERITAULT Roamin
+ * @author GUERITAULT Romain
  *
  * @date 2024
  */
@@ -184,37 +184,46 @@ void M_ARBRE_ajouter(M_ARBRE **a, int deb, int fin)
     }
 }   
 
+/*
+affichage_arbre_inter est une fonction récursive qui fait un affichage de la structure d'arbre. Cette procédure prend un pointeur sur un noeud et un entier espacement.
+espacement permet de "décollé" un noeud de la gauche du terminal et de laisser de l'espace vide pour avoir un arbre lisible.
+Cette procédure affiche d'abord le sous-arbre droit (il est ainsi au-dessus dans le terminal) puis l'élément de noeud et enfin le sous arbre gauche (qui est en-dessous dans le terminal).
+ */
 void affichage_arbre_inter(M_ARBRE* pnoeud, int espacement){
-  bool fiston = false;
+  bool fiston = false;					// Ce booléen permet de faire de l'ajustement dans l'espacement
   
   // bloc de droite (au-dessus)
-  if(pnoeud != NULL){
-    if(pnoeud->d != NULL){
-      fiston = true;
-      espacement += 8;
+  if(pnoeud != NULL){					// Si le noeud existe, il a potentiellement un fils droit ...
+    if(pnoeud->d != NULL){				// ... et s'il a en effet un fils à droite ...
+      fiston = true;					// ... alors on met fiston a true ...
+      espacement += 8;					// ... et on augmente l'espacement pour faire l'affichage du fils en décallé
     }
-    affichage_arbre_inter(pnoeud->d, espacement);
+    affichage_arbre_inter(pnoeud->d, espacement);	// Si le noeud existe on affiche son fils droit (qui peut être NULL)
   }
   
   // bloc central
-  for(int i = 0; i < espacement-(fiston*8); i++){
-    printf(" ");
+  for(int i = 0; i < espacement-(fiston*8); i++){	//Si on a augmenté espacement à cause d'un fils à droite, il faut faire un ajustement pour l'affichage de l'élément de ce noeud, i.e. revenir d'un cran dans l'espacement
+    printf(" ");					// On espace suffisament le noeud actuel
   }
-  if(pnoeud == NULL){printf("        NULL\n");}
-  else{printf("(%d,%d)\n",pnoeud->deb,pnoeud->fin);}
+  if(pnoeud == NULL){printf("        NULL\n");}		// On affiche l'élément dans le cas où il est NULL
+  else{printf("(%d,%d)\n",pnoeud->deb,pnoeud->fin);}	// Et dans le cas où il n'est pas NULL
     
   // bloc de gauche (en-dessous)
-  if(pnoeud != NULL){
-    if(pnoeud->g != NULL){
-      if(!fiston){espacement += 8;}
+  if(pnoeud != NULL){					// Si le noeud existe, il a potentiellement un fils gauche ...
+    if(pnoeud->g != NULL){				// ... et s'il a en effet un fils à gauche ...
+      if(!fiston){espacement += 8;}			// ... alors on augmente espacement si cela n'a pas déjà été fait.
     }
-    else{
-      if(fiston){espacement = espacement - 8;}
+    else{						// Si par contre, il n'a pas de fils gauche ...
+      if(fiston){espacement = espacement - 8;}		// Et qu'on avait augmenté espacement, alors on le rediminue pour faire l'affichage au bon endroit.
     }
-    affichage_arbre_inter(pnoeud->g, espacement);
+    affichage_arbre_inter(pnoeud->g, espacement);	// Si le noeud existe on affiche son fils gauche (qui peut être NULL)
   }
 }
 
+/*
+affichage_arbre est une fonction cadre.
+Elle permet simplement d'améliorer la lisibilité en isolant l'arbre qu'on affiche à l'aide de ---.
+ */
 void affichage_arbre(M_ARBRE* pracine){
   printf("------------------------------------------\n");
   affichage_arbre_inter(pracine,0);
