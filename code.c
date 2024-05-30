@@ -97,77 +97,20 @@ void M_ARBRE_ajouter(M_ARBRE** a, int deb, int fin) {
   }
 }
 
-/**
- * @brief Vérifie si un arbre est un arbre maximier
- *
- * Cette fonction prend en paramètre un pointeur vers un arbre (M_ARBRE) et vérifie si cet arbre est un arbre maximier.
- * Un arbre est considéré comme maximier si chaque nœud est supérieur ou égal à ses enfants.
- * Elle retourne vrai (true) si l'arbre est maximier, et faux (false) sinon.
- *
- * @param arbre Un pointeur vers l'arbre à vérifier
- * @return bool Retourne vrai si l'arbre est maximier, faux sinon
- */
-bool est_maximier(M_ARBRE *arbre)
-{
-    if (arbre == NULL)
-    {
-        return true; // Un arbre vide est considéré comme maximier
-    }
-
-    // Vérifier l'enfant gauche
-    if (arbre->g != NULL && (arbre->deb < arbre->g->deb || !est_maximier(arbre->g)))
-    {
-        return false;
-    }
-
-    // Vérifier l'enfant droit
-    if (arbre->d != NULL && (arbre->deb < arbre->d->deb || !est_maximier(arbre->d)))
-    {
-        return false;
-    }
-
-    return true;
-}
-/*
-void affichage_arbre(M_ARBRE* pracine, int espacement){
-  if(est_vide(pracine)){printf("L'arbre est vide\n");}
-  else{
-    bool plus = false;
-    if(pracine->g != NULL || pracine->d != NULL){
-      espacement += 8;
-      plus = true;
-    }
-    
-    // bloc de droite (au-dessus)
-    if(pracine->d != NULL){affichage_arbre(pracine->d, espacement);}
-    
-    // bloc central
-    for(int i = 0; i < espacement-plus*8; i++){
-      printf(" ");
-    }
-    printf("(%d,%d)\n",pracine->deb,pracine->fin);
-    
-    // bloc de gauche (en-dessous)
-    if(pracine->g != NULL){affichage_arbre(pracine->g, espacement);}
-  }
-}
- */
-
 void affichage_arbre_inter(M_ARBRE* pnoeud, int espacement){
-  bool yag = false;
-  bool yad = false;
+  bool fiston = false;
   
   // bloc de droite (au-dessus)
   if(pnoeud != NULL){
     if(pnoeud->d != NULL){
-      yad = true;
+      fiston = true;
       espacement += 8;
     }
     affichage_arbre_inter(pnoeud->d, espacement);
   }
   
   // bloc central
-  for(int i = 0; i < espacement-(yag || yad)*8; i++){
+  for(int i = 0; i < espacement-(fiston*8); i++){
     printf(" ");
   }
   if(pnoeud == NULL){printf("        NULL\n");}
@@ -176,8 +119,10 @@ void affichage_arbre_inter(M_ARBRE* pnoeud, int espacement){
   // bloc de gauche (en-dessous)
   if(pnoeud != NULL){
     if(pnoeud->g != NULL){
-      yag = true;
-      if(!yad){espacement += 8;}
+      if(!fiston){espacement += 8;}
+    }
+    else{
+      if(fiston){espacement = espacement - 8;}
     }
     affichage_arbre_inter(pnoeud->g, espacement);
   }
