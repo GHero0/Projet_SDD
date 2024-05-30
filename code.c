@@ -103,6 +103,27 @@ int M_ARBRE_LGMAX(M_ARBRE *a)
     }
 }
 
+void M_ARBRE_rotation_g(M_ARBRE **a)
+{
+    if ((*a)->d != NULL)
+    {
+        M_ARBRE *tmp = (*a)->d;
+        (*a)->d = tmp->g;
+        tmp->g = *a;
+        *a = tmp;
+    }
+}
+
+void M_ARBRE_rotation_d(M_ARBRE **a)
+{
+    if ((*a)->g != NULL)
+    {
+        M_ARBRE *tmp = (*a)->g;
+        (*a)->g = tmp->d;
+        tmp->d = *a;
+        *a = tmp;
+    }
+}
 
 void M_ARBRE_ajouter(M_ARBRE **a, int deb, int fin)
 {
@@ -125,6 +146,10 @@ void M_ARBRE_ajouter(M_ARBRE **a, int deb, int fin)
                 (*a)->fin = ((*a)->d)->fin;
                 (*a)->d = ((*a)->d)->d;
             }
+            if (M_ARBRE_LGMAX(*a) < fin - deb)
+            {
+                M_ARBRE_rotation_g(a);
+            }
         }
         else if (fin == (*a)->deb)
         { // Correspond à une fusion "à gauche"
@@ -135,73 +160,30 @@ void M_ARBRE_ajouter(M_ARBRE **a, int deb, int fin)
                 (*a)->deb = ((*a)->g)->deb;
                 (*a)->g = ((*a)->g)->g;
             }
+            if (M_ARBRE_LGMAX(*a) < fin - deb)
+            {
+                M_ARBRE_rotation_d(a);
+            }
         }
         else if (deb < (*a)->deb)
         {
             M_ARBRE_ajouter(&((*a)->g), deb, fin); // On ajoute à gauche
+            if (M_ARBRE_LGMAX(*a) < fin - deb)
+            {
+                M_ARBRE_rotation_d(a);
+            }
         }
-        else
+        else 
         {
             M_ARBRE_ajouter(&((*a)->d), deb, fin); // On ajoute à droite
+            if (M_ARBRE_LGMAX(*a) < fin - deb)
+            {
+                M_ARBRE_rotation_g(a);
+            }
         }
     }
-}
+}   
 
-/**
- * @brief Vérifie si un arbre est un arbre maximier
- *
- * Cette fonction prend en paramètre un pointeur vers un arbre (M_ARBRE) et vérifie si cet arbre est un arbre maximier.
- * Un arbre est considéré comme maximier si chaque nœud est supérieur ou égal à ses enfants.
- * Elle retourne vrai (true) si l'arbre est maximier, et faux (false) sinon.
- *
- * @param arbre Un pointeur vers l'arbre à vérifier
- * @return bool Retourne vrai si l'arbre est maximier, faux sinon
- */
-bool M_ARBRE_est_maximier(M_ARBRE *arbre)
-{
-    if (arbre == NULL)
-    {
-        return true; // Un arbre vide est considéré comme maximier
-    }
-
-    // Vérifier l'enfant gauche
-    if (arbre->g != NULL && (arbre->deb < arbre->g->deb || !M_ARBRE_est_maximier(arbre->g)))
-    {
-        return false;
-    }
-
-    // Vérifier l'enfant droit
-    if (arbre->d != NULL && (arbre->deb < arbre->d->deb || !M_ARBRE_est_maximier(arbre->d)))
-    {
-        return false;
-    }
-
-    return true;
-}
-
-
-
-void M_ARBRE_rotation_g(M_ARBRE **a)
-{
-    if ((*a)->d != NULL)
-    {
-        M_ARBRE *tmp = (*a)->d;
-        (*a)->d = tmp->g;
-        tmp->g = *a;
-        *a = tmp;
-    }
-}
-
-void M_ARBRE_rotation_d(M_ARBRE **a)
-{
-    if ((*a)->g != NULL)
-    {
-        M_ARBRE *tmp = (*a)->g;
-        (*a)->g = tmp->d;
-        tmp->d = *a;
-        *a = tmp;
-    }
-}
 void affichage_arbre_inter(M_ARBRE* pnoeud, int espacement){
   bool fiston = false;
   
