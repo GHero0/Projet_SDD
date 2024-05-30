@@ -7,8 +7,19 @@
 #include <stdio.h>
 #include <stdbool.h>
 
+// Header Doxygen
+/**
+ * @file code.h
+ * @brief Description des structures et prototypes des 
+ * fonctions/procédures qui permettent de manipuler un arbre binaire de trous.
+ *
+ * @author PIRCA George
+ * @author GUERITAULT Roamin
+ *
+ * @date 2024
+ */
 
-//Création des structures
+// Création des structures
 
 typedef struct M_ARBRE {
     struct M_ARBRE* g;
