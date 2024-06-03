@@ -123,38 +123,14 @@ void M_ARBRE_ajouter(M_ARBRE **a, int deb, int fin)
     }
     else
     {
-        if (deb == (*a)->fin)
-        { // Correspond à une fusion "à droite"
-            (*a)->fin = fin;
-            // Double fusion lorsqu'on complete le trou
-            if ((*a)->d !=NULL && ((*a)->fin == ((*a)->d)->deb))
-            {
-                (*a)->fin = ((*a)->d)->fin;
-                (*a)->d = ((*a)->d)->d;
-            }
-            if (M_ARBRE_LGMAX(*a) < fin - deb)
-            {
-                M_ARBRE_rotation_g(a);
-            }
-        }
-        else if (fin == (*a)->deb)
-        { // Correspond à une fusion "à gauche"
-            (*a)->deb = deb;
-            // Double fusion lorsqu'on complete le trou
-            if ((*a)->g != NULL && (*a)->deb == ((*a)->g)->fin)
-            {
-                (*a)->deb = ((*a)->g)->deb;
-                (*a)->g = ((*a)->g)->g;
-            }
-            if (M_ARBRE_LGMAX(*a) < fin - deb)
-            {
-                M_ARBRE_rotation_d(a);
-            }
-        }
-        else if (deb < (*a)->deb)
+        if (deb < (*a)->deb)
         {
             M_ARBRE_ajouter(&((*a)->g), deb, fin); // On ajoute à gauche
-            if (M_ARBRE_LGMAX(*a) < fin - deb)
+            if((*a)->deb == ((*a)->g)->fin){  // Fusion à gauche
+              (*a)->deb = ((*a)->g)->deb;
+              (*a)->g = ((*a)->g)->g;
+            }
+            if (M_ARBRE_LGMAX(*a) < M_ARBRE_LGMAX((*a)->g))
             {
                 M_ARBRE_rotation_d(a);
             }
@@ -162,7 +138,11 @@ void M_ARBRE_ajouter(M_ARBRE **a, int deb, int fin)
         else 
         {
             M_ARBRE_ajouter(&((*a)->d), deb, fin); // On ajoute à droite
-            if (M_ARBRE_LGMAX(*a) < fin - deb)
+            if((*a)->fin == ((*a)->d)->deb){  // Fusion à droite
+              (*a)->fin = ((*a)->d)->fin;
+              (*a)->d = ((*a)->d)->d;
+            }
+            if (M_ARBRE_LGMAX(*a) < M_ARBRE_LGMAX((*a)->d))
             {
                 M_ARBRE_rotation_g(a);
             }
