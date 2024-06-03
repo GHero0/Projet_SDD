@@ -40,7 +40,6 @@ void affichage(M_ARBRE*);
 void M_ARBRE_ajouter(M_ARBRE **, int, int);
 void M_ARBRE_rotation_g(M_ARBRE **a);
 void M_ARBRE_rotation_d(M_ARBRE **a);
-void affichage_arbre_inter(M_ARBRE *, int);
 void affichage_arbre(M_ARBRE *);
 
 #endif

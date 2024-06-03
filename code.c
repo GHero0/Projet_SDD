@@ -41,6 +41,7 @@ bool M_ARBRE_est_vide(M_ARBRE *a)
 }
 
 
+<<<<<<< HEAD
 /**
  * Calcule la longueur maximale de l'arbre.
  *
@@ -49,6 +50,13 @@ bool M_ARBRE_est_vide(M_ARBRE *a)
  *
  * @param a Un pointeur vers l'arbre spécifié.
  * @return La longueur maximale de l'arbre.
+=======
+/*
+affichage prend la racine d'un arbre et print un affichage style file de priorité. Cela nous a été utile pour le développement.
+Pour cela on crée un tableau avec autant de cases que de 'cases mémoires' de la file de priorité.
+Ensuite on lance ecrire qui va modifier le tableau avec des 1 dans les cases présentes dans l'arbre.
+Finalement on parcourt ce tableau et pour chaque on représente un trou (1 dans le tableau) avec . et un plein avec #.
+>>>>>>> romain
  */
 int M_ARBRE_LGMAX(M_ARBRE *a)
 {
@@ -188,7 +196,7 @@ void affichage_arbre_inter(M_ARBRE* pnoeud, int espacement){
   }
   
   // bloc central
-  for(int i = 0; i < espacement-(fiston*8); i++){	//Si on a augmenté espacement à cause d'un fils à droite, il faut faire un ajustement pour l'affichage de l'élément de ce noeud, i.e. revenir d'un cran dans l'espacement
+  for(int i = 0; i < espacement-(fiston*8); i++){	// Si on a augmenté espacement à cause d'un fils à droite, il faut faire un ajustement pour l'affichage de l'élément de ce noeud, i.e. revenir d'un cran dans l'espacement
     printf(" ");					// On espace suffisament le noeud actuel
   }
   if(pnoeud == NULL){printf("        NULL\n");}		// On affiche l'élément dans le cas où il est NULL
