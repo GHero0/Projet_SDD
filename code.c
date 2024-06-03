@@ -104,6 +104,42 @@ void M_ARBRE_rotation_d(M_ARBRE **a)
     }
 }
 
+void M_ARBRE_remonte(M_ARBRE **a, int deb, int fin)
+{
+    if (*a == NULL)
+    {
+        return;
+    }
+    if ((*a)->deb == deb && (*a)->fin == fin)
+    {
+        return;
+    }
+    if (deb < (*a)->deb)
+    {
+        M_ARBRE_remonte(&((*a)->g), deb, fin);
+        M_ARBRE_rotation_d(a);
+    }
+    else
+    {
+        M_ARBRE_remonte(&((*a)->d), deb, fin);
+        M_ARBRE_rotation_g(a);
+    }
+}
+
+void fusion_ss_arbre(M_ARBRE** a, int deb, int fin){
+  M_ARBRE_remonte(a,deb,fin); // Met l'élément qu'on à ajouté en racine de cette arbre
+  if( (*a)->d != NULL && (*a)->fin == ((*a)->d)->deb ){ // Fusion à droite
+    (*a)->fin = ((*a)->d)->fin;
+    (*a)->d = ((*a)->d)->d;
+  }
+  else{
+    if( (*a)->g != NULL && (*a)->deb == ((*a)->g)->fin ){ // Fusion à gauche
+      (*a)->deb = ((*a)->g)->deb;
+      (*a)->g = ((*a)->g)->g;
+    }
+  }
+}
+
 /**
  * Ajoute un noeud (deb, fin) à un arbre binaire de recherche et garde la propriété de maximier.
  *
@@ -126,7 +162,10 @@ void M_ARBRE_ajouter(M_ARBRE **a, int deb, int fin)
         if (deb < (*a)->deb)
         {
             M_ARBRE_ajouter(&((*a)->g), deb, fin); // On ajoute à gauche
-            if (M_ARBRE_LGMAX(*a) < fin - deb)
+            if((*a)->deb == fin || (*a)->fin == deb){
+              fusion_ss_arbre(a,deb,fin);
+            }
+            if (M_ARBRE_LGMAX(*a) < M_ARBRE_LGMAX((*a)->g))
             {
                 M_ARBRE_rotation_d(a);
             }
@@ -134,7 +173,10 @@ void M_ARBRE_ajouter(M_ARBRE **a, int deb, int fin)
         else 
         {
             M_ARBRE_ajouter(&((*a)->d), deb, fin); // On ajoute à droite
-            if (M_ARBRE_LGMAX(*a) < fin - deb)
+            if((*a)->deb == fin || (*a)->fin == deb){
+              fusion_ss_arbre(a,deb,fin);
+            }
+            if (M_ARBRE_LGMAX(*a) < M_ARBRE_LGMAX((*a)->d))
             {
                 M_ARBRE_rotation_g(a);
             }
@@ -238,27 +280,4 @@ void affichage(M_ARBRE *pracine)
         }
     }
     printf("\n");
-}
-
-
-void M_ARBRE_remonte(M_ARBRE **a, int deb, int fin)
-{
-    if (*a == NULL)
-    {
-        return;
-    }
-    if ((*a)->deb == deb && (*a)->fin == fin)
-    {
-        return;
-    }
-    if (deb < (*a)->deb)
-    {
-        M_ARBRE_remonte(&((*a)->g), deb, fin);
-        M_ARBRE_rotation_d(a);
-    }
-    else
-    {
-        M_ARBRE_remonte(&((*a)->d), deb, fin);
-        M_ARBRE_rotation_g(a);
-    }
 }
