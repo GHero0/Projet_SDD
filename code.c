@@ -238,18 +238,22 @@ Puis on applique ce traitement aux ss_arbres gauche et droit afin de traiter tou
  */
 void ecrire(M_ARBRE *pnoeud, unsigned char *tab)
 {
-    if ((*pnoeud).g != NULL)
+    if (pnoeud == NULL)
     {
-        ecrire((*pnoeud).g, tab);
+        return;
+    }
+    if (pnoeud->g != NULL)
+    {
+        ecrire(pnoeud->g, tab);
     }
     char i;
-    for (i = (*pnoeud).deb; i < (*pnoeud).fin; i++)
+    for (i = pnoeud->deb; i < pnoeud->fin; i++)
     {
         *(tab + i) = 1;
     }
-    if ((*pnoeud).d != NULL)
+    if (pnoeud->d != NULL)
     {
-        ecrire((*pnoeud).d, tab);
+        ecrire(pnoeud->d, tab);
     }
 }
 
